@@ -1,0 +1,10 @@
+{{define "main"}}
+<main>
+    <h1>Main Page!</h1>
+    <input type="text" value="123"/>
+
+    {{ range $key, $value := .Initial }}
+        <li>{{ $key }}: {{ $value }}</li>
+    {{ end }}
+</main>
+{{end}}

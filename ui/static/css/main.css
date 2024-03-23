@@ -1,0 +1,93 @@
+/* INITIAL */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    --link-bright: #F6F4F3;
+    --link-default: red;
+
+    --text-default: black;
+    --text-bright: red;
+
+    --footer-color: #C4B9B3;
+    --header-color: #F9F3F1;
+    --content-color: #EAD7D1;
+}
+
+body {
+    font-family: "M PLUS Code Latin", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+
+    min-height: 100vh;
+    height: 100%;
+    margin: 0;
+    background-color: var(--content-color);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+h1, h2, h3, p {
+    margin: 0;
+}
+
+h1 {
+    font-size: 1.45rem;
+}
+
+/* MAIN */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* HEADER */
+.header {
+    background: var(--header-color);
+    padding: 1em;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-logo .header-emoji {
+    display: block;
+    margin: 0 3px 3px 0;
+}
+
+.header-logo .mdn-logo {
+    width: 140px;
+}
+
+.header-logo a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-m,
+.logo-_ {
+    fill: #D5A99A;
+}
+
+/* FOOTER */
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--footer-color);
+    min-height: 100px;
+}
+
+.footer a {
+    color: var(--link-bright);
+}
