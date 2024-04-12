@@ -1,50 +1,35 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gocolly/colly"
+	"toffee.server.cssinitial/cmd/web/helpers"
 )
 
 type ScrappedCSSFormalDefinition struct {
 	Initial map[string]string
 }
 
-// TODO вынести в отдельный пакет
-func Join(separator string, path ...string) string {
-	result := ""
-	for i := range path {
-		result += path[i]
-		if i != len(path)-1 {
-			result += separator
-		}
-	}
-	return result
-}
-
-func buildHtmlQuery(path []string) string {
-	return Join(" ", path...)
+func BuildHTMLQuery(path []string) string {
+	return helpers.Join(" ", path...)
 }
 
 func getCssInitialDataByQuery(query string) (ScrappedCSSFormalDefinition, error) {
+	c := colly.NewCollector(colly.Async(true))
 	cssData := ScrappedCSSFormalDefinition{
 		Initial: make(map[string]string),
 	}
 
-	c := colly.NewCollector(colly.Async(true))
-
-	//c.OnRequest(func(r *colly.Request) {
-	//	fmt.Println("Visiting", r.URL)
-	//})
-
-	queryToSearch := []string{
+	htmlSelector := BuildHTMLQuery([]string{
 		"[aria-labelledby='formal_definition']",
 		".properties",
 		"tr:contains('Initial value')",
 		"td",
-	}
+	})
 
 	// Note: Данный скрапер нужен просто на случай, если у нас несколько значений initial
 	// Это не кажется оптимальным, но пока что так 🤡
-	c.OnHTML(buildHtmlQuery(queryToSearch)+" ul", func(e *colly.HTMLElement) {
+	c.OnHTML(fmt.Sprintf("%s %s", htmlSelector, "ul"), func(e *colly.HTMLElement) {
 		if e.Text == "" {
 			return
 		}
@@ -59,17 +44,16 @@ func getCssInitialDataByQuery(query string) (ScrappedCSSFormalDefinition, error)
 		})
 	})
 
-	c.OnHTML(buildHtmlQuery(queryToSearch), func(e *colly.HTMLElement) {
+	c.OnHTML(htmlSelector, func(e *colly.HTMLElement) {
 		if e.ChildText("ul") != "" {
 			return
 		}
 
 		cssData.Initial[query] = e.Text
 	})
-
-	err := c.Visit("https://developer.mozilla.org/en-US/docs/Web/CSS/" + query)
 	c.Wait()
-	if err != nil {
+	urlToScrap := fmt.Sprintf("%s%s", "https://developer.mozilla.org/en-US/docs/Web/CSS/", query)
+	if err := c.Visit(urlToScrap); err != nil {
 		return cssData, err
 	}
 
