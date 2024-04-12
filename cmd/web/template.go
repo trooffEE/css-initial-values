@@ -10,6 +10,7 @@ func createHTML(w http.ResponseWriter, apply func(w http.ResponseWriter, ts *tem
 		"./ui/html/base.html",
 		"./ui/html/partials/footer.html",
 		"./ui/html/pages/home.html",
+		"./ui/html/forms/search.html",
 	}
 	ts, err := template.ParseFiles(filesPathes...)
 	if err != nil {

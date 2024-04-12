@@ -1,11 +1,6 @@
 {{define "main"}}
-<main>
-    <h1>Main Page!</h1>
-    <form method="POST">
-        <label>CSS-property:</label><br />
-        <input type="text" name="q"><br />
-    </form>
-
+<main class="main">
+    {{ template "search-form" . }}
     {{ range $key, $value := .Initial }}
         <li>{{ $key }}: {{ $value }}</li>
     {{ end }}

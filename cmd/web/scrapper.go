@@ -14,6 +14,12 @@ func BuildHTMLQuery(path []string) string {
 	return helpers.Join(" ", path...)
 }
 
+func findPageAndWait(c *colly.Collector, url string) error {
+	err := c.Visit(url)
+	c.Wait()
+	return err
+}
+
 func getCssInitialDataByQuery(query string) (ScrappedCSSFormalDefinition, error) {
 	c := colly.NewCollector(colly.Async(true))
 	cssData := ScrappedCSSFormalDefinition{
@@ -51,9 +57,10 @@ func getCssInitialDataByQuery(query string) (ScrappedCSSFormalDefinition, error)
 
 		cssData.Initial[query] = e.Text
 	})
-	c.Wait()
+
 	urlToScrap := fmt.Sprintf("%s%s", "https://developer.mozilla.org/en-US/docs/Web/CSS/", query)
-	if err := c.Visit(urlToScrap); err != nil {
+
+	if err := findPageAndWait(c, urlToScrap); err != nil {
 		return cssData, err
 	}
 
