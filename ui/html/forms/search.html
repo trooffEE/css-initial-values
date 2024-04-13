@@ -1,8 +1,8 @@
 {{ define "search-form" }}
-<form class="search-form" method="POST">
+<form class="search-form" method="POST" action="javascript:handleClientSubmit()">
     <div class="search-form__label-container">
         <label>CSS Initial Property<span class="underline"></span></label>
     </div>
-    <input type="text" name="query">
+    <input id="query" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048" tabindex="1" />
 </form>
 {{ end }}

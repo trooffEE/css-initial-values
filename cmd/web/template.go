@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func createHTML(w http.ResponseWriter, apply func(w http.ResponseWriter, ts *template.Template)) {
+func createTemplate(w http.ResponseWriter, apply func(w http.ResponseWriter, ts *template.Template)) {
 	filesPathes := []string{
 		"./ui/html/base.html",
 		"./ui/html/partials/footer.html",

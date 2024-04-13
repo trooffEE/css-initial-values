@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func createPage(w http.ResponseWriter, ts *template.Template, data any) {
+func richHtmlWithData(w http.ResponseWriter, ts *template.Template, data any) {
 	err := ts.ExecuteTemplate(w, "base", data)
 	if err != nil {
 		log.Print(err.Error())
@@ -14,27 +14,36 @@ func createPage(w http.ResponseWriter, ts *template.Template, data any) {
 	}
 }
 
-func createQueryPage(w http.ResponseWriter, ts *template.Template, query string) {
-	cssPropData, err := getCssInitialDataByQuery(query)
+func createPage(w http.ResponseWriter, ts *template.Template, query string) {
+	cssPropData, err := ScrappedCSSFormalDefinition{}, error(nil)
+	if query != "" {
+		cssPropData, err = getCssInitialDataByQuery(query)
+	}
 	if err != nil {
 		http.Error(w, "Scrapping implementation error", http.StatusInternalServerError)
 		return
 	}
 
-	createPage(w, ts, cssPropData)
+	richHtmlWithData(w, ts, cssPropData)
+}
+
+func handleRedirect(w http.ResponseWriter, r *http.Request, query string) {
+	url := "/"
+	if query != "" {
+		url += "?query=" + query
+	}
+
+	http.Redirect(w, r, url, http.StatusSeeOther)
 }
 
 func viewApp(w http.ResponseWriter, r *http.Request) {
+	query := r.FormValue("query")
 	if r.URL.Path != "/" {
-		http.NotFound(w, r)
+		handleRedirect(w, r, query)
+		return
 	}
 
-	createHTML(w, func(w http.ResponseWriter, ts *template.Template) {
-		query := r.URL.Query().Get("q")
-		if query == "" {
-			createPage(w, ts, nil)
-		} else {
-			createQueryPage(w, ts, query)
-		}
+	createTemplate(w, func(w http.ResponseWriter, ts *template.Template) {
+		createPage(w, ts, query)
 	})
 }

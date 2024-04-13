@@ -108,6 +108,7 @@ h1 {
     display: flex;
     align-items: center;
     flex-direction: column;
+    justify-content: center;
     gap: 1rem;
     margin-bottom: 1em;
 }
@@ -161,17 +162,28 @@ h1 {
 /* label end */
 
 /* input start */
+.autoComplete_wrapper {
+    width: calc(100% + 40px) !important;
+}
+
 .search-form input {
-    width: calc(100% + 40px);
-    padding: 0.4em 1em;
-    border: 2px solid var(--color-main-700);
-    border-radius: 0.4em;
+    width: 100% !important;
+    padding: 0.4em 1em !important;
+    border: 2px solid var(--color-main-700) !important;
+    border-radius: 0.4em !important;
+    background-image: none !important;
+    color: var(--color-text-default) !important;
+    height: fit-content !important;
 
-    font-family: "M PLUS Code Latin", monospace;
-    font-size: calc(var(--font-size-md) * 0.9);
-    text-align: center;
+    font-family: "M PLUS Code Latin", monospace !important;
+    font-size: calc(var(--font-size-md) * 0.9) !important;
+    text-align: center !important;
 
-    background-color: var(--color-main-300);
+    background-color: var(--color-main-300) !important;
+}
+
+.search-form input:placeholder {
+    color: red !important;
 }
 
 .search-form input:focus-visible {
